@@ -1,3 +1,5 @@
+package classes;
+
 public class Process {
     private int PID;
     private int arrive_time;

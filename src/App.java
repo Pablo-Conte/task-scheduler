@@ -1,8 +1,10 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class App {
+import classes.Interpreter;
+import classes.Process;
 
+public class App {
     public static void main(String[] args) {
         String fileName = "file_1.txt";
 
@@ -24,5 +26,6 @@ public class App {
             System.out.println("PID: " + process.getPID() + ", Arrival Time: " + process.getArrive_time() +
                     ", Burst Time: " + process.getBurst() + ", Priority: " + process.getPriority());
         }
+
     }
 }
