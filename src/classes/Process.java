@@ -1,17 +1,18 @@
 package classes;
 
-import enums.ProcessStatus;
-
 public class Process {
     private int PID;
-    private int arrive_time;
+    private int arrivalTime;
+    private int startTime = -1;
+    private int remainingTime;
     private int burst;
     private int priority;
-    private ProcessStatus status;
+    private int completionTime;
 
-    public Process(int PID, int arrive_time, int burst, int priority) {
+    public Process(int PID, int arrivalTime, int burst, int priority) {
         this.PID = PID;
-        this.arrive_time = arrive_time;
+        this.arrivalTime = arrivalTime;
+        this.remainingTime = burst;
         this.burst = burst;
         this.priority = priority;
     }
@@ -24,12 +25,20 @@ public class Process {
         PID = pID;
     }
 
-    public int getArrive_time() {
-        return arrive_time;
+    public int getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setArrive_time(int arrive_time) {
-        this.arrive_time = arrive_time;
+    public void setArrivalTime(int arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
     }
 
     public int getBurst() {
@@ -48,11 +57,19 @@ public class Process {
         this.priority = priority;
     }
 
-    public ProcessStatus getStatus() {
-        return status;
+    public int getStartTime() {
+        return startTime;
     }
 
-    public void setStatus(ProcessStatus status) {
-        this.status = status;
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(int completionTime) {
+        this.completionTime = completionTime;
     }
 }

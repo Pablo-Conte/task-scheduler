@@ -1,14 +1,16 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import classes.Interpreter;
 import classes.Process;
+import classes.Scheduler;
 
 public class App {
     public static void main(String[] args) {
         String fileName = "file_1.txt";
 
-        Process[] processes = new Process[0];
+        List<Process> processes = null;
 
         try {
             processes = Interpreter.commandInterpreter(fileName);
@@ -22,10 +24,7 @@ public class App {
             System.out.println("An unexpected error occurred: " + error.getMessage());
         }
 
-        for (Process process : processes) {
-            System.out.println("PID: " + process.getPID() + ", Arrival Time: " + process.getArrive_time() +
-                    ", Burst Time: " + process.getBurst() + ", Priority: " + process.getPriority());
-        }
+        Scheduler.proemptivePriorityScheduling(processes);
 
     }
 }

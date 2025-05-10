@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class Interpreter {
-    public static Process[] commandInterpreter(String fileNameAndExtension)
+    public static List<Process> commandInterpreter(String fileNameAndExtension)
             throws FileNotFoundException, IOException, NumberFormatException {
         String filePath = "src/process_files/" + fileNameAndExtension;
 
@@ -56,9 +57,7 @@ public class Interpreter {
 
         reader.close();
 
-        System.out.println("Processes loaded successfully.");
-        System.out.println("Total processes: " + processCountDesconsideringFirstLine);
-
-        return processes;
+        List<Process> processList = List.of(processes);
+        return processList;
     }
 }

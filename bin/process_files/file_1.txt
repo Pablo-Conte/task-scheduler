@@ -1,5 +1,6 @@
-PID / ARRIVE TIME / BURST / PRIORITY
-1, 1, 2, 1
-2, 2, 3, 2
-3, 3, 3, 2
-4, 4, 4, 1
+PID / ARRIVAL TIME / BURST / PRIORITY
+1, 0, 3, 3
+2, 1, 4, 2
+3, 2, 6, 4
+4, 3, 4, 6
+5, 5, 10, 10
