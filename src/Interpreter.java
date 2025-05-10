@@ -5,7 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Interpreter {
-    public static Process[] commandInterpreter(String fileNameAndExtension) throws FileNotFoundException, IOException {
+    public static Process[] commandInterpreter(String fileNameAndExtension)
+            throws FileNotFoundException, IOException, NumberFormatException {
         String filePath = "src/process_files/" + fileNameAndExtension;
 
         File file = new File(filePath);

@@ -14,6 +14,8 @@ public class App {
             System.out.println("File not found: " + error.getMessage());
         } catch (IOException error) {
             System.out.println("Error reading lines: " + error.getMessage());
+        } catch (NumberFormatException error) {
+            System.out.println("Your process file have a invalid pattern: " + error.getMessage());
         } catch (Exception error) {
             System.out.println("An unexpected error occurred: " + error.getMessage());
         }
