@@ -4,6 +4,13 @@ public class Process {
     private int burst;
     private int priority;
 
+    public Process(int PID, int arrive_time, int burst, int priority) {
+        this.PID = PID;
+        this.arrive_time = arrive_time;
+        this.burst = burst;
+        this.priority = priority;
+    }
+
     public int getPID() {
         return PID;
     }
