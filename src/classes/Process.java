@@ -1,10 +1,13 @@
 package classes;
 
+import enums.ProcessStatus;
+
 public class Process {
     private int PID;
     private int arrive_time;
     private int burst;
     private int priority;
+    private ProcessStatus status;
 
     public Process(int PID, int arrive_time, int burst, int priority) {
         this.PID = PID;
@@ -43,5 +46,13 @@ public class Process {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public ProcessStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProcessStatus status) {
+        this.status = status;
     }
 }
