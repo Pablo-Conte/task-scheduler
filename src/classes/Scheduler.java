@@ -8,7 +8,7 @@ public class Scheduler {
     public static void proemptivePriorityScheduling(List<Process> processes) {
         int time = 0;
         int processCount = processes.size();
-        System.out.println("Total number of processes: " + processCount);
+        
         int completed = 0;
 
         List<Process> readyQueue = new ArrayList<>();
@@ -19,7 +19,7 @@ public class Scheduler {
                     readyQueue.add(process);
                 }
             }
-
+            
             Process currentProcess = readyQueue.stream()
                     .filter(process -> process.getRemainingTime() > 0)
                     .min(Comparator.comparingInt((Process process) -> process.getPriority())
@@ -56,7 +56,10 @@ public class Scheduler {
         int totalWaitingTime = 0;
 
         for (Process p : processes) {
-            int waitingTime = p.getStartTime() - p.getArrivalTime();
+            int turnaroundTime = p.getCompletionTime() - p.getArrivalTime();
+            int waitingTime = turnaroundTime - p.getBurst();
+
+            System.out.println(waitingTime);
             totalWaitingTime += waitingTime;
         }
 
