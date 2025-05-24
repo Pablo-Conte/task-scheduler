@@ -85,7 +85,10 @@ public class Scheduler {
                 }
 
                 if (timeSlice == quantum) {
-                    currentProcess.setQuantityOfQuantum(currentProcess.getQuantityOfQuantum() + 1);
+                    boolean hasConcurrency = allNotFinishedProcessesWithTheHigherPriority.size() > 1;
+                    if (hasConcurrency) {
+                        currentProcess.setQuantityOfQuantum(currentProcess.getQuantityOfQuantum() + 1);
+                    }
                     timeSlice = 0;
                 }
             }
