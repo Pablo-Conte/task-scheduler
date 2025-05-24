@@ -5,41 +5,89 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Scheduler {
-    public static void proemptivePriorityScheduling(List<Process> processes) {
+    public static void preemptivePriorityWithQuantum(List<Process> processes, int quantum) {
         int time = 0;
         int processCount = processes.size();
-        System.out.println("Total number of processes: " + processCount);
         int completed = 0;
 
         List<Process> readyQueue = new ArrayList<>();
+        Process currentProcess = null;
+        int timeSlice = 0;
 
         while (completed < processCount) {
             for (Process process : processes) {
                 if (process.getArrivalTime() == time) {
-                    readyQueue.add(process);
+                    boolean alreadyInQueue = readyQueue.stream()
+                            .anyMatch(p -> p.getPID() == process.getPID());
+                    if (!alreadyInQueue) {
+                        readyQueue.add(process);
+                    }
                 }
             }
 
-            Process currentProcess = readyQueue.stream()
+            if (readyQueue.isEmpty()) {
+                System.out.printf(" %2d  |   Idle\n", time);
+                time++;
+                continue;
+            }
+
+            List<Process> allNotFinishedProcesses = readyQueue.stream()
                     .filter(process -> process.getRemainingTime() > 0)
-                    .min(Comparator.comparingInt((Process process) -> process.getPriority())
-                            .thenComparingInt(process -> process.getArrivalTime()))
-                    .orElse(null);
+                    .toList();
+
+            List<Process> allNotFinishedProcessesSorted = allNotFinishedProcesses.stream()
+                    .sorted(Comparator.comparingInt((Process process) -> process.getPriority()))
+                    .toList();
+
+            int higherPriority = allNotFinishedProcessesSorted.get(0).getPriority();
+
+            List<Process> allNotFinishedProcessesWithTheHigherPriority = allNotFinishedProcessesSorted.stream()
+                    .filter(process -> process.getPriority() == higherPriority)
+                    .sorted(Comparator.comparingInt((Process process) -> process.getQuantityOfQuantum()))
+                    .toList();
+
+            boolean isTheSameProcess = currentProcess != null
+                    && currentProcess.getPID() == allNotFinishedProcessesWithTheHigherPriority.get(0).getPID();
+
+            if (!isTheSameProcess) {
+                timeSlice = 0;
+            }
+
+            currentProcess = allNotFinishedProcessesWithTheHigherPriority.get(0);
 
             if (currentProcess != null) {
-                if (currentProcess.getStartTime() == -1)
+                if (currentProcess.getStartTime() == -1) {
                     currentProcess.setStartTime(time);
+                }
+            }
 
-                currentProcess.setRemainingTime(currentProcess.getRemainingTime() - 1);
+            if (currentProcess != null) {
+                if (timeSlice < quantum) {
+                    currentProcess.setRemainingTime(currentProcess.getRemainingTime() - 1);
+                    System.out.printf(" %2d  |   P%d\n", time, currentProcess.getPID());
+                    timeSlice++;
+                } else {
+                    currentProcess.setQuantityOfQuantum(currentProcess.getQuantityOfQuantum() + 1);
+                    timeSlice = 0;
 
-                System.out.printf(" %2d  |     P%d\n", time + 1, currentProcess.getPID());
+                    currentProcess = null;
 
-                if (currentProcess.getRemainingTime() == 0) {
+                    continue;
+                }
+
+                boolean hasFinished = currentProcess.getRemainingTime() == 0;
+
+                if (hasFinished) {
                     currentProcess.setCompletionTime(time + 1);
                     completed++;
+                    currentProcess = null;
+                    timeSlice = 0;
                 }
-            } else {
-                System.out.printf(" %2d  |     Idle\n", time + 1);
+
+                if (timeSlice == quantum) {
+                    currentProcess.setQuantityOfQuantum(currentProcess.getQuantityOfQuantum() + 1);
+                    timeSlice = 0;
+                }
             }
 
             time++;
@@ -53,15 +101,15 @@ public class Scheduler {
                     p.getCompletionTime());
         }
 
-        int totalWaitingTime = 0;
+        List<Integer> waitingTimes = new ArrayList<>();
 
-        for (Process p : processes) {
-            int waitingTime = p.getStartTime() - p.getArrivalTime();
-            totalWaitingTime += waitingTime;
+        for (Process process : processes) {
+            int waitingTime = process.getCompletionTime() - process.getBurst() - process.getArrivalTime();
+            waitingTimes.add(waitingTime);
         }
 
-        double averageWaitingTime = (double) totalWaitingTime / processCount;
-
+        double totalWaitingTime = waitingTimes.stream().mapToInt(Integer::intValue).sum();
+        double averageWaitingTime = totalWaitingTime / processCount;
         System.out.printf("\nAverage waiting time: %.2f unit time\n", averageWaitingTime);
     }
 }

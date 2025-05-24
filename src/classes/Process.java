@@ -8,6 +8,7 @@ public class Process {
     private int burst;
     private int priority;
     private int completionTime;
+    private int quantityOfQuantum = 0;
 
     public Process(int PID, int arrivalTime, int burst, int priority) {
         this.PID = PID;
@@ -71,5 +72,13 @@ public class Process {
 
     public void setCompletionTime(int completionTime) {
         this.completionTime = completionTime;
+    }
+
+    public int getQuantityOfQuantum() {
+        return quantityOfQuantum;
+    }
+
+    public void setQuantityOfQuantum(int quantityOfQuantum) {
+        this.quantityOfQuantum = quantityOfQuantum;
     }
 }

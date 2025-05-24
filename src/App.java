@@ -24,7 +24,7 @@ public class App {
             System.out.println("An unexpected error occurred: " + error.getMessage());
         }
 
-        Scheduler.proemptivePriorityScheduling(processes);
+        Scheduler.preemptivePriorityWithQuantum(processes, 4);
 
     }
 }
