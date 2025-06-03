@@ -14,6 +14,8 @@ public class Scheduler {
         Process currentProcess = null;
         int timeSlice = 0;
 
+        Process recentlyFinishedProcess = null;
+
         while (completed < processCount) {
             for (Process process : processes) {
                 if (process.getArrivalTime() == time) {
@@ -46,8 +48,25 @@ public class Scheduler {
                     .sorted(Comparator.comparingInt((Process process) -> process.getQuantityOfQuantum()))
                     .toList();
 
+            Process nextProcess = allNotFinishedProcessesWithTheHigherPriority.get(0);
+
             boolean isTheSameProcess = currentProcess != null
                     && currentProcess.getPID() == allNotFinishedProcessesWithTheHigherPriority.get(0).getPID();
+
+            Process previousProcess = currentProcess;
+            currentProcess = nextProcess;
+
+            boolean isDifferentProcess = previousProcess == null ||
+                    previousProcess.getPID() != currentProcess.getPID();
+
+            if (isDifferentProcess && previousProcess != null) {
+                System.out.println("\n>>> Troca de processo:");
+                System.out.printf("    Saindo: PID = P%d | BURST = %d | RESTANTE = %d\n",
+                        previousProcess.getPID(), previousProcess.getBurst(), previousProcess.getRemainingTime());
+                System.out.printf("    Entrando: PID = P%d | BURST = %d | PRIORIDADE = %d\n\n",
+                        currentProcess.getPID(), currentProcess.getBurst(), currentProcess.getPriority());
+                timeSlice = 0;
+            }
 
             if (!isTheSameProcess) {
                 timeSlice = 0;
@@ -59,6 +78,16 @@ public class Scheduler {
                 if (currentProcess.getStartTime() == -1) {
                     currentProcess.setStartTime(time);
                 }
+            }
+
+            if (recentlyFinishedProcess != null) {
+                System.out.println("\n>>> Processo finalizado:");
+                System.out.printf("   Saindo: PID = P%d | BURST = %d | RESTANTE = %d\n",
+                        recentlyFinishedProcess.getPID(), recentlyFinishedProcess.getBurst(),
+                        recentlyFinishedProcess.getRemainingTime());
+                System.out.printf("   Entrando: PID = P%d | BURST = %d | PRIORIDADE = %d\n\n",
+                        currentProcess.getPID(), currentProcess.getBurst(), currentProcess.getPriority());
+                recentlyFinishedProcess = null;
             }
 
             if (currentProcess != null) {
@@ -80,6 +109,7 @@ public class Scheduler {
                 if (hasFinished) {
                     currentProcess.setCompletionTime(time + 1);
                     completed++;
+                    recentlyFinishedProcess = currentProcess;
                     currentProcess = null;
                     timeSlice = 0;
                 }
@@ -115,4 +145,5 @@ public class Scheduler {
         double averageWaitingTime = totalWaitingTime / processCount;
         System.out.printf("\nAverage waiting time: %.2f unit time\n", averageWaitingTime);
     }
+
 }
