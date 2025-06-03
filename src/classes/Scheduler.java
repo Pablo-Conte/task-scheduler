@@ -80,7 +80,7 @@ public class Scheduler {
                 }
             }
 
-            if (recentlyFinishedProcess != null) {
+            if (recentlyFinishedProcess != null && currentProcess != null) {
                 System.out.println("\n>>> Processo finalizado:");
                 System.out.printf("   Saindo: PID = P%d | BURST = %d | RESTANTE = %d\n",
                         recentlyFinishedProcess.getPID(), recentlyFinishedProcess.getBurst(),
